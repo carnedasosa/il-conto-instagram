@@ -34,6 +34,7 @@ Uso:
 """
 import argparse
 import json
+import re
 import shutil
 import subprocess
 import sys
@@ -113,6 +114,8 @@ def controlla_episodio(voce, radice, avvisi):
         return None, f"pubblicazione.json non valido: {e}"
     ep_dir = pj.parent
     cartella = p.get("cartella") or ep_dir.name
+    if not re.fullmatch(r"[a-z0-9][a-z0-9._-]*", cartella):
+        return None, f"nome di cartella non valido: {cartella!r}"
     testo = (p.get("caption") or "").strip()
     if not testo:
         return None, "caption vuota in pubblicazione.json"
@@ -125,8 +128,11 @@ def controlla_episodio(voce, radice, avvisi):
 
     def trova(chiave_pj, chiave_cal):
         for base, rel in ((ep_dir, p.get(chiave_pj)), (radice, voce.get(chiave_cal))):
-            if rel and (base / rel).exists():
-                return base / rel
+            if not rel:
+                continue
+            cand = (base / rel).resolve()
+            if cand.is_relative_to(base.resolve()) and cand.exists():   # niente percorsi che escono dalla cartella
+                return cand
         return None
 
     video = trova("video", "video")

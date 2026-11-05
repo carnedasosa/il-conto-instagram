@@ -47,7 +47,10 @@ PAUSA_COMMENTO = 10
 
 
 class ApiError(Exception):
-    pass
+    """Errore dell'API. str(e) va nei log; e.breve (solo codici, niente testo di Meta) va in pubblicati.json."""
+    def __init__(self, msg, breve):
+        super().__init__(msg)
+        self.breve = breve
 
 
 def call(method, path, **params):
@@ -62,8 +65,19 @@ def call(method, path, **params):
         with urllib.request.urlopen(req, timeout=60) as r:
             return json.load(r)
     except urllib.error.HTTPError as e:
-        # Il token non compare mai: l'URL non viene stampato, solo il percorso.
-        raise ApiError(f"Errore API {e.code} su {path}: {e.read().decode()}")
+        # Il token non compare mai: l'URL non viene stampato e dal corpo della risposta tengo solo i campi utili.
+        corpo = e.read().decode(errors="replace")
+        try:
+            err = json.loads(corpo).get("error", {})
+            dettaglio = (f"tipo={err.get('type')} codice={err.get('code')} sub={err.get('error_subcode')} "
+                         f"messaggio={str(err.get('message', ''))[:200]}")
+            breve = f"errore API {e.code}, codice {err.get('code')}"
+        except Exception:
+            dettaglio, breve = "corpo non leggibile", f"errore API {e.code}"
+        token = os.environ.get("IG_ACCESS_TOKEN", "")
+        if token:
+            dettaglio = dettaglio.replace(token, "[token]")
+        raise ApiError(f"Errore API {e.code} su {path}: {dettaglio}", breve)
 
 
 def call_or_exit(method, path, **params):
@@ -94,7 +108,7 @@ def pubblica_commento(media_id, testo):
             r = call("POST", f"{media_id}/comments", message=testo)
             return r["id"], None
         except ApiError as e:
-            ultimo = str(e)
+            ultimo = e.breve
             print(f"   commento: tentativo {n}/{TENTATIVI_COMMENTO} non riuscito")
             if n < TENTATIVI_COMMENTO:
                 time.sleep(PAUSA_COMMENTO)
