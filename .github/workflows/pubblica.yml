@@ -1,0 +1,62 @@
+name: Pubblica su Instagram
+
+on:
+  schedule:
+    - cron: "7,37 * * * *"   # ogni 30 minuti controlla il calendario (minuti 7 e 37: meno coda che a :00 e :30)
+  workflow_dispatch:
+    inputs:
+      post:
+        description: "id del reel da pubblicare subito (vuoto = segui il calendario)"
+        required: false
+      verifica:
+        description: "solo verifica: prepara il reel su Instagram ma non lo pubblica (serve anche post)"
+        type: boolean
+        default: false
+      commenta:
+        description: "id del reel già uscito di cui riprovare il primo commento (vuoto = niente)"
+        required: false
+
+permissions:
+  contents: write
+
+# Un giro alla volta: col cron e l'attività di Windows due giri possono partire insieme, e un reel
+# resta in elaborazione qualche minuto. Il secondo aspetta e legge pubblicati.json aggiornato.
+concurrency:
+  group: pubblica-il-conto
+  cancel-in-progress: false
+
+jobs:
+  pubblica:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    defaults:
+      run:
+        working-directory: pubblicazione
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}   # l'ultima versione del branch: un giro rimasto in coda deve vedere il pubblicati.json aggiornato
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pubblica i reel arrivati alla loro ora
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+          IMAGE_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/pubblicazione/jpg
+          VIDEO_BASE_URL: https://raw.githubusercontent.com/${{ github.repository }}/${{ github.ref_name }}/pubblicazione/video
+          POST_ID: ${{ inputs.post }}
+          VERIFICA: ${{ inputs.verifica }}
+          COMMENTA_ID: ${{ inputs.commenta }}
+        run: |
+          if [ -n "$COMMENTA_ID" ]; then python3 publish.py --commenta "$COMMENTA_ID"
+          elif [ "$VERIFICA" = "true" ]; then python3 publish.py --check --post "$POST_ID"
+          elif [ -n "$POST_ID" ]; then python3 publish.py --post "$POST_ID"
+          else python3 publish.py --due; fi
+      - name: Salva lo stato
+        if: always()   # anche se il commento o un passo dopo la pubblicazione è fallito: il reel uscito deve restare registrato
+        run: |
+          git config user.name "il-conto-bot"
+          git config user.email "actions@github.com"
+          git add pubblicati.json 2>/dev/null || exit 0
+          git diff --cached --quiet || (git commit -m "Pubblicato su Instagram" && git pull --rebase && git push)

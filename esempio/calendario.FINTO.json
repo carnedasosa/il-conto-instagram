@@ -1,0 +1,18 @@
+{
+  "FINTO": "ESEMPIO FINTO per provare gli script. Non e' il calendario vero: quello e' ../calendario.json",
+  "fuso_orario": "Europe/Rome",
+  "post": [
+    {"id": "990", "quando": "2099-01-05T20:00", "rubrica": "Il Conto FINTO",
+     "video": "episodi/e90-finto-pronto/render/e90-finto-pronto.mp4",
+     "copertina": "episodi/e90-finto-pronto/render/copertina.jpg",
+     "caption": "episodi/e90-finto-pronto/pubblicazione.json"},
+    {"id": "991", "quando": "2099-01-06T20:00", "rubrica": "Il Conto FINTO",
+     "video": "episodi/e91-finto-senza-video/render/e91-finto-senza-video.mp4",
+     "copertina": "episodi/e91-finto-senza-video/render/copertina.jpg",
+     "caption": "episodi/e91-finto-senza-video/pubblicazione.json"},
+    {"id": "992", "quando": "2099-01-07T20:00", "rubrica": "Il Conto FINTO",
+     "video": "episodi/e92-finto-senza-json/render/e92.mp4",
+     "copertina": "episodi/e92-finto-senza-json/render/copertina.jpg",
+     "caption": "episodi/e92-finto-senza-json/pubblicazione.json"}
+  ]
+}
