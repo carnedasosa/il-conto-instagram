@@ -42,6 +42,12 @@ Prove fatte stanotte, tutte senza token (risultati in `stanotte/stato/automazion
 2. Nel riquadro «2. Genera i token d'accesso» clicca **Aggiungi account** ed entra con il profilo di Il Conto.
 3. Nell'app Instagram del profilo di Il Conto accetta l'invito: **Impostazioni → App e siti web → Inviti tester**.
 
+**Se l'invito non compare** (successo il 5 novembre con `@da.allora`, invitato prima che il profilo fosse professionale):
+- Non esiste una pagina ufficiale di Meta che spieghi perché. La pagina dei ruoli dell'app non nomina l'«Instagram Tester» e non dice che tipo di account serve. Quello che segue è un tentativo, non una regola documentata.
+- Nel pannello dell'app, scheda **Ruoli**, controlla che l'invito sia di tipo **Instagram Tester** (non «Tester» generico: è un ruolo diverso, che si accetta da Facebook) e che il nome sia scritto esattamente `da.allora`. Se risulta «in sospeso», rimuovilo e **reinvialo adesso** che il profilo è professionale.
+- Prova anche la versione web: instagram.com/accounts/manage_access/ (indicata da guide di terzi, non confermata da Meta), con il profilo di Il Conto aperto.
+- L'invito non va accettato da Facebook: quello è per gli «Authorized App Tester».
+
 ### 3. Aggiungi il permesso dei commenti (prima di generare il token)
 
 Nello stesso caso d'uso, nella scheda dei permessi (il nome in italiano può variare, cerca «Autorizzazioni e funzioni»), aggiungi **`instagram_business_manage_comments`** accanto a `instagram_business_basic` e `instagram_business_content_publish`. È lo stesso permesso che Meta indica per i commenti con Instagram Login.
