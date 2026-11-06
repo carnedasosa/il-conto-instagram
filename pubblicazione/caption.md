@@ -4,14 +4,14 @@ Generato da `pubblicazione/carica.py`: non modificarlo a mano, cambia l'episodio
 
 | Quando | Reel | Stato |
 |---|---|---|
-| 2026-11-09T20:00 | e01-wanna-marchi | in calendario |
-| 2026-11-10T20:00 | e02-jet-pepsi | in calendario |
-| 2026-11-11T20:00 | e03-parmalat | in calendario |
-| 2026-11-12T20:00 | e08-diamanti-anversa | in calendario |
-| 2026-11-13T20:00 | e05-gioconda | in calendario |
-| 2026-11-16T20:00 | e06-caffe-sindona | in calendario |
-| 2026-11-17T20:00 | e04-disco-discarica | in calendario |
-| 2026-11-18T20:00 | e07-monopoly | in calendario |
+| 2026-11-09T12:30 | e01-wanna-marchi | in calendario |
+| 2026-11-10T12:30 | e02-jet-pepsi | in calendario |
+| 2026-11-11T12:30 | e03-parmalat | in calendario |
+| 2026-11-12T12:30 | e08-diamanti-anversa | in calendario |
+| 2026-11-13T12:30 | e05-gioconda | in calendario |
+| 2026-11-16T12:30 | e06-caffe-sindona | in calendario |
+| 2026-11-17T12:30 | e04-disco-discarica | in calendario |
+| 2026-11-18T12:30 | e07-monopoly | in calendario |
 
 ## e01-wanna-marchi
 

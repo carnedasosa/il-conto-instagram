@@ -122,7 +122,7 @@ python -X utf8 pubblicazione/carica.py --dry-run
 python -X utf8 pubblicazione/carica.py --ricomprimi
 ```
 
-4. `git pull`, `git add`, commit e push. Da qui il reel esce da solo all'ora in calendario, di solito pochi minuti dopo le 20:05 grazie all'attività di Windows (vedi «Riserva su Windows»).
+4. `git pull`, `git add`, commit e push. Da qui il reel esce da solo all'ora in calendario, di solito pochi minuti dopo le 12:35 grazie all'attività di Windows (vedi «Riserva su Windows»).
 5. Controllo di cosa uscirebbe adesso, senza toccare Instagram: `python -X utf8 pubblicazione/publish.py --dry-run --due`.
 
 Su Windows serve sempre `python -X utf8`.
@@ -178,11 +178,11 @@ Il token dura **60 giorni**. Appena generato, segnati la scadenza (data di gener
 
 ## Riserva su Windows (attiva dal 6 novembre 2026)
 
-**Il cron di GitHub da solo non basta.** È impostato ogni 30 minuti, ma misurato il 6 novembre gira ogni 4-8 ore, sia qui sia su Spiegoni: senza riserva un reel delle 20:00 può uscire a notte fonda.
+**Il cron di GitHub da solo non basta.** È impostato ogni 30 minuti, ma misurato il 6 novembre gira ogni 4-8 ore, sia qui sia su Spiegoni: senza riserva un reel delle 12:30 può uscire ore dopo.
 
-L'attività **«Il Conto - pubblica reel»** lancia il workflow ogni giorno alle **20:05 e alle 20:35**. È senza input, quindi pubblica solo ciò che è già arrivato alla sua ora, e `pubblicati.json` impedisce che un reel esca due volte.
+L'attività **«Il Conto - pubblica reel»** lancia il workflow ogni giorno alle **12:35 e alle 13:05**. È senza input, quindi pubblica solo ciò che è già arrivato alla sua ora, e `pubblicati.json` impedisce che un reel esca due volte.
 
-- **Il PC deve essere acceso e con la tua sessione aperta** alle 20:05. Se non lo è, l'attività parte appena rientri, e nel frattempo resta solo il cron.
+- **Il PC deve essere acceso e con la tua sessione aperta** alle 12:35. Se non lo è, l'attività parte appena rientri, e nel frattempo resta solo il cron.
 - **Se cambi l'ora dei reel** nel calendario, cambia anche l'ora dell'attività.
 - **Per toglierla:**
 
