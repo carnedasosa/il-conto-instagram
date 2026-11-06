@@ -122,7 +122,7 @@ python -X utf8 pubblicazione/carica.py --dry-run
 python -X utf8 pubblicazione/carica.py --ricomprimi
 ```
 
-4. `git pull`, `git add`, commit e push. Da qui il reel esce da solo all'ora in calendario (il cron può arrivare 10-30 minuti dopo).
+4. `git pull`, `git add`, commit e push. Da qui il reel esce da solo all'ora in calendario, di solito pochi minuti dopo le 20:05 grazie all'attività di Windows (vedi «Riserva su Windows»).
 5. Controllo di cosa uscirebbe adesso, senza toccare Instagram: `python -X utf8 pubblicazione/publish.py --dry-run --due`.
 
 Su Windows serve sempre `python -X utf8`.
@@ -176,12 +176,18 @@ Tutto letto il 5 novembre 2026 sulle pagine ufficiali di Meta. Dove le pagine si
 
 Il token dura **60 giorni**. Appena generato, segnati la scadenza (data di generazione + 60 giorni) e rigeneralo dal pannello qualche giorno prima: rigenera il token e rilancia `imposta_token.py`. Meta può anche invalidarlo prima, con errore 190 (è successo a Spiegoni il 4 novembre): se la pubblicazione fallisce con «Errore API 190», rigeneralo.
 
-## Riserva su Windows (facoltativa, NON creata)
+## Riserva su Windows (attiva dal 6 novembre 2026)
 
-Wine Life e Spiegoni hanno un'attività di Windows che lancia il workflow due volte al giorno, perché il cron di GitHub può saltare dei giri. Per Il Conto non è stata creata. Se vuoi la riserva, il comando da lanciare è lo stesso, senza input, quindi pubblica solo ciò che è già scaduto:
+**Il cron di GitHub da solo non basta.** È impostato ogni 30 minuti, ma misurato il 6 novembre gira ogni 4-8 ore, sia qui sia su Spiegoni: senza riserva un reel delle 20:00 può uscire a notte fonda.
 
-```bash
-gh workflow run pubblica.yml -R carnedasosa/il-conto-instagram
+L'attività **«Il Conto - pubblica reel»** lancia il workflow ogni giorno alle **20:05 e alle 20:35**. È senza input, quindi pubblica solo ciò che è già arrivato alla sua ora, e `pubblicati.json` impedisce che un reel esca due volte.
+
+- **Il PC deve essere acceso e con la tua sessione aperta** alle 20:05. Se non lo è, l'attività parte appena rientri, e nel frattempo resta solo il cron.
+- **Se cambi l'ora dei reel** nel calendario, cambia anche l'ora dell'attività.
+- **Per toglierla:**
+
+```powershell
+Unregister-ScheduledTask -TaskName "Il Conto - pubblica reel"
 ```
 
 ## Regole da non dimenticare
