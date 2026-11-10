@@ -66,3 +66,28 @@ jobs:
           git config user.email "actions@github.com"
           git add pubblicati.json 2>/dev/null || exit 0
           git diff --cached --quiet || (git commit -m "Pubblicato su Instagram" && git pull --rebase && git push)
+      # Numeri per il pannello social: follower e metriche dei post, letti con lo stesso token.
+      # Non pubblica niente. Nei giri automatici legge al massimo ogni 3 ore (lo decide insights.py) e negli altri
+      # dura un secondo; un giro lanciato a mano legge sempre, così serve anche da controllo del token.
+      # Se il token è stato invalidato (errore 190) questo passo fallisce: il giro diventa rosso e lo si vede
+      # subito, invece che al primo post che non esce. Ogni altro problema lascia il giro verde.
+      - name: Numeri per il pannello
+        if: ${{ !cancelled() }}
+        timeout-minutes: 5
+        env:
+          IG_USER_ID: ${{ secrets.IG_USER_ID }}
+          IG_ACCESS_TOKEN: ${{ secrets.IG_ACCESS_TOKEN }}
+        run: |
+          esito=0
+          if [ "$GITHUB_EVENT_NAME" = "schedule" ]; then ogni="--ogni-ore 3"; else ogni=""; fi
+          python3 insights.py $ogni || esito=$?
+          # Salvare il file non deve far fallire il giro: se il push non riesce, si rilegge al prossimo.
+          if [ -f insights.json ]; then
+            git config user.name "pannello-numeri" || true
+            git config user.email "actions@github.com" || true
+            git add insights.json || true
+            if ! git diff --cached --quiet; then
+              git commit -q -m "Numeri Instagram" && { git pull -q --rebase && git push -q || { sleep 10; git pull -q --rebase && git push -q; }; }                 || echo "::warning::Numeri letti ma non salvati nel repo: riprovo al prossimo giro"
+            fi
+          fi
+          exit $esito
