@@ -15,7 +15,8 @@ pubblicazione/
   pubblicati.json    i reel già usciti (lo scrive il bot: niente esce due volte)
   video/  jpg/       i file che Instagram scarica da raw.githubusercontent.com
 esempio/             dati FINTI per provare carica.py senza episodi veri
-.github/workflows/pubblica.yml   il giro che gira ogni 30 minuti
+.github/workflows/pubblica.yml   il giro (cron ogni 30 minuti, in pratica ogni 4-8 ore; vedi GUIDA.md)
+windows/giro.ps1     lanciato dalle attività di Windows: avvia il giro e avvisa con una finestra se fallisce
 ```
 
 Prove senza token (dalla cartella `il-conto-instagram`, su Windows serve `-X utf8`):

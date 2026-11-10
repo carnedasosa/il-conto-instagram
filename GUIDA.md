@@ -60,7 +60,7 @@ Non rigenerare i token di Wine Life e Spiegoni: non serve, hanno già i loro.
 2. Dopo aver creato il repository (punto 5), da terminale, nella cartella `il-conto-instagram`:
 
 ```bash
-python pubblicazione/imposta_token.py --profilo NOMEDELPROFILO
+python pubblicazione/imposta_token.py --profilo da.allora
 ```
 
 Lo script chiede il token senza mostrarlo, legge da Instagram il nome del profilo, **rifiuta @winee.life e @glispiegoni** (i profili già automatizzati) e ti chiede conferma prima di salvare `IG_ACCESS_TOKEN` e `IG_USER_ID` nei Secrets del repo.
@@ -174,20 +174,34 @@ Tutto letto il 5 novembre 2026 sulle pagine ufficiali di Meta. Dove le pagine si
 
 ## Rinnovo del token
 
-Il token dura **60 giorni**. Appena generato, segnati la scadenza (data di generazione + 60 giorni) e rigeneralo dal pannello qualche giorno prima: rigenera il token e rilancia `imposta_token.py`. Meta può anche invalidarlo prima, con errore 190 (è successo a Spiegoni il 4 novembre): se la pubblicazione fallisce con «Errore API 190», rigeneralo.
+Il token dura **60 giorni**. Appena generato, segnati la scadenza (data di generazione + 60 giorni) e rigeneralo dal pannello qualche giorno prima: rigenera il token e rilancia `imposta_token.py`. Meta può anche invalidarlo prima, con errore 190: è successo a Spiegoni il 4 novembre, a Wine Life il 5 e a Il Conto tra il 9 e il 10. Meta non dice perché. Se la pubblicazione fallisce con «Errore API 190», rigeneralo:
+
+1. developers.facebook.com → **app «wine-life»** → **Casi d'uso** → **Personalizza** → **Configurazione dell'API con Instagram Login** → **Genera token** accanto a da.allora.
+2. Nella cartella `il-conto-instagram`: `python pubblicazione/imposta_token.py --profilo da.allora`
+3. Per far uscire subito il reel rimasto indietro: `gh workflow run pubblica.yml -R carnedasosa/il-conto-instagram`
+
+Per controllare il token senza pubblicare: `gh workflow run pubblica.yml -R carnedasosa/il-conto-instagram -f token=true`. Lo fa già ogni mattina l'attività «Il Conto - controlla token» (vedi sotto).
 
 ## Riserva su Windows (attiva dal 6 novembre 2026)
 
 **Il cron di GitHub da solo non basta.** È impostato ogni 30 minuti, ma misurato il 6 novembre gira ogni 4-8 ore, sia qui sia su Spiegoni: senza riserva un reel delle 12:30 può uscire ore dopo.
 
-L'attività **«Il Conto - pubblica reel»** lancia il workflow ogni giorno alle **12:35 e alle 13:05**. È senza input, quindi pubblica solo ciò che è già arrivato alla sua ora, e `pubblicati.json` impedisce che un reel esca due volte.
+Due attività, tutte e due lanciano `windows/giro.ps1`, che avvia il workflow, ne aspetta l'esito e **apre una finestra «Il Conto» se fallisce**, con il link al log e i passi per rigenerare il token:
 
-- **Il PC deve essere acceso e con la tua sessione aperta** alle 12:35. Se non lo è, l'attività parte appena rientri, e nel frattempo resta solo il cron.
-- **Se cambi l'ora dei reel** nel calendario, cambia anche l'ora dell'attività.
-- **Per toglierla:**
+- **«Il Conto - pubblica reel»**, ogni giorno alle **12:35 e alle 13:05**. È senza input, quindi pubblica solo ciò che è già arrivato alla sua ora, e `pubblicati.json` impedisce che un reel esca due volte.
+- **«Il Conto - controlla token»**, ogni giorno alle **9:30** (dal 10 novembre 2026). Controlla solo che il token funzioni e non pubblica niente: se compare la finestra, hai tempo fino alle 12:30 per rigenerarlo.
+
+Da sapere:
+- **Il PC deve essere acceso e con la tua sessione aperta.** Se non lo è, le attività partono appena rientri, e nel frattempo resta solo il cron, che non avvisa.
+- **Lo storico** dei giri lanciati da qui è in `%LOCALAPPDATA%\il-conto-giro.log`.
+- **Per vedere la finestra di avviso** senza toccare Instagram: `powershell -ExecutionPolicy Bypass -File windows\giro.ps1 -Modo prova`.
+- **Se cambi l'ora dei reel** nel calendario, cambia anche l'ora delle attività.
+- **Se sposti la cartella** `il-conto-instagram`, le attività non trovano più lo script: vanno ricreate.
+- **Per toglierle:**
 
 ```powershell
 Unregister-ScheduledTask -TaskName "Il Conto - pubblica reel"
+Unregister-ScheduledTask -TaskName "Il Conto - controlla token"
 ```
 
 ## Regole da non dimenticare
