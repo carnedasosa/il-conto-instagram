@@ -1,0 +1,40 @@
+{
+  "versione": 1,
+  "letto_il": "2026-11-10T18:00:05Z",
+  "account": {
+    "username": "da.allora",
+    "follower": 3,
+    "seguiti": 1,
+    "post": 2
+  },
+  "insights": "ok",
+  "post": [
+    {
+      "media_id": "17988170883074714",
+      "permalink": "https://www.instagram.com/reel/Dfj31-GgcAq/",
+      "pubblicato_il": "2026-11-10T12:09:46+0000",
+      "tipo": "REELS",
+      "like": 2,
+      "commenti": 1,
+      "copertura": 15,
+      "visualizzazioni": 16,
+      "salvataggi": 0,
+      "condivisioni": 0,
+      "interazioni": 3
+    },
+    {
+      "media_id": "17981090633915907",
+      "permalink": "https://www.instagram.com/reel/DfhS7fAAW6e/",
+      "pubblicato_il": "2026-11-09T12:09:05+0000",
+      "tipo": "REELS",
+      "like": 3,
+      "commenti": 1,
+      "copertura": 124,
+      "visualizzazioni": 149,
+      "salvataggi": 0,
+      "condivisioni": 0,
+      "interazioni": 4
+    }
+  ],
+  "errore": null
+}
