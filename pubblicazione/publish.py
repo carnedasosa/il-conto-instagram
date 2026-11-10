@@ -21,6 +21,7 @@ Esempi:
   python3 publish.py --due                           # pubblica i reel arrivati alla loro ora
   python3 publish.py --check --post ID               # prepara il reel su Instagram ma NON lo pubblica
   python3 publish.py --commenta ID                   # riprova il primo commento di un reel già uscito
+  python3 publish.py --token                         # controlla solo che il token funzioni, non pubblica
 """
 import argparse
 import json
@@ -143,6 +144,17 @@ def publish(post, dry_run, check=False):
     return media_id
 
 
+def controlla_token():
+    """Una lettura del profilo: se il token è stato invalidato (errore 190) esce con errore. Non pubblica nulla."""
+    for var in ("IG_USER_ID", "IG_ACCESS_TOKEN"):
+        if not os.environ.get(var):
+            sys.exit(f"Manca la variabile {var}")
+    me = call_or_exit("GET", "me", fields="user_id,username")
+    if str(me.get("user_id")) != os.environ["IG_USER_ID"]:
+        sys.exit(f"Il token è di @{me.get('username')}, non dell'account in IG_USER_ID")
+    print(f"Token valido per @{me.get('username')}")
+
+
 def salva(done):
     STATO.write_text(json.dumps(done, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
@@ -154,9 +166,13 @@ def main():
     p.add_argument("--commenta", metavar="ID", help="riprova il primo commento di un reel già pubblicato")
     p.add_argument("--dry-run", action="store_true", help="non chiama Instagram e non legge token")
     p.add_argument("--check", action="store_true", help="con --post: prepara il reel su Instagram senza pubblicarlo")
+    p.add_argument("--token", action="store_true", help="controlla solo che il token funzioni, non pubblica")
     args = p.parse_args()
+    if args.token:
+        controlla_token()
+        return
     if not (args.due or args.post or args.commenta):
-        p.error("serve --due, --post ID oppure --commenta ID")
+        p.error("serve --due, --post ID, --commenta ID oppure --token")
     if args.check and not args.post:
         p.error("--check va usato con --post ID")
 

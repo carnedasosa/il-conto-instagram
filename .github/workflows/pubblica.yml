@@ -15,6 +15,10 @@ on:
       commenta:
         description: "id del reel già uscito di cui riprovare il primo commento (vuoto = niente)"
         required: false
+      token:
+        description: "controlla solo che il token funzioni, non pubblica niente"
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -48,8 +52,10 @@ jobs:
           POST_ID: ${{ inputs.post }}
           VERIFICA: ${{ inputs.verifica }}
           COMMENTA_ID: ${{ inputs.commenta }}
+          SOLO_TOKEN: ${{ inputs.token }}
         run: |
-          if [ -n "$COMMENTA_ID" ]; then python3 publish.py --commenta "$COMMENTA_ID"
+          if [ "$SOLO_TOKEN" = "true" ]; then python3 publish.py --token
+          elif [ -n "$COMMENTA_ID" ]; then python3 publish.py --commenta "$COMMENTA_ID"
           elif [ "$VERIFICA" = "true" ]; then python3 publish.py --check --post "$POST_ID"
           elif [ -n "$POST_ID" ]; then python3 publish.py --post "$POST_ID"
           else python3 publish.py --due; fi
