@@ -1,14 +1,27 @@
 {
   "versione": 1,
-  "letto_il": "2026-11-18T08:30:24Z",
+  "letto_il": "2026-11-18T11:37:05Z",
   "account": {
     "username": "da.allora",
     "follower": 3,
     "seguiti": 2,
-    "post": 7
+    "post": 8
   },
   "insights": "ok",
   "post": [
+    {
+      "media_id": "18128696131912213",
+      "permalink": "https://www.instagram.com/reel/Df4aZj2iaib/",
+      "pubblicato_il": "2026-11-18T11:36:53+0000",
+      "tipo": "REELS",
+      "like": 0,
+      "commenti": 1,
+      "copertura": 0,
+      "visualizzazioni": 0,
+      "salvataggi": 0,
+      "condivisioni": 0,
+      "interazioni": 1
+    },
     {
       "media_id": "18120071033019567",
       "permalink": "https://www.instagram.com/reel/Df11mgMmUfc/",
